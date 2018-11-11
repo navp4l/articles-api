@@ -57,6 +57,29 @@ func GetArticle(w http.ResponseWriter, r *http.Request) {
 	handleRespAsJSON(w, http.StatusOK, article)
 }
 
+func GetTagInfo(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	tagName := vars["tagName"]
+	date := vars["date"]
+
+	tagInfo := TagInfo{Tag: tagName, Date: date}
+
+	if err := tagInfo.GetTagInfo(); err != nil {
+		switch err {
+
+		case sql.ErrNoRows:
+			handleError(w, http.StatusNotFound, "Tag not found")
+
+		default:
+			handleError(w, http.StatusInternalServerError, err.Error())
+		}
+		return
+	}
+
+	handleRespAsJSON(w, http.StatusOK, tagInfo)
+}
+
 func handleError(w http.ResponseWriter, code int, message string) {
 	handleRespAsJSON(w, code, map[string]string{"error": message})
 }
