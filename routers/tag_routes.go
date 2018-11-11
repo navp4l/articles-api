@@ -6,5 +6,5 @@ import (
 )
 
 func InitializeTagRoutes(router *mux.Router) {
-	router.HandleFunc("/tag/{tagName:[a-z]+}/{date:[0-9]+}", GetArticle).Methods("GET")
+	router.HandleFunc("/tags/{tagName:[a-z]+}/{date:[0-9]+}", GetTagInfo).Methods("GET")
 }

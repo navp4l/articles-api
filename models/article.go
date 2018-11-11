@@ -7,11 +7,11 @@ import (
 )
 
 type Article struct {
-	ID    int      `json:"Id"`
-	Title string   `json:"Title"`
-	Date  string   `json:"Date"`
-	Body  string   `json:"Body"`
-	Tags  []string `json:"Tags"`
+	ID    int      `json:"id"`
+	Title string   `json:"title"`
+	Date  string   `json:"date"`
+	Body  string   `json:"body"`
+	Tags  []string `json:"tags"`
 }
 
 func (article *Article) CreateArticle() error {
@@ -119,7 +119,7 @@ func (article *Article) CreateArticle() error {
 
 func (article *Article) GetArticle() error {
 	selectArticleStatement := fmt.Sprintf("SELECT title, body, date FROM articles WHERE Id=%d", article.ID)
-	selectArticleErr := DB.QueryRow(selectArticleStatement).Scan(&article.Title, &article.Date, &article.Body)
+	selectArticleErr := DB.QueryRow(selectArticleStatement).Scan(&article.Title, &article.Body, &article.Date)
 
 	if selectArticleErr != nil {
 		log.Println("Inside Get Article - selectArticleStatement")
