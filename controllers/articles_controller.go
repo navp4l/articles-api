@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -14,6 +15,7 @@ func CreateArticle(w http.ResponseWriter, r *http.Request) {
 	var art Article
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&art); err != nil {
+		log.Print(err)
 		handleError(w, http.StatusBadRequest, "Invalid request")
 		return
 	}
