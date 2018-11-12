@@ -10,6 +10,7 @@ import (
 	"net/http"
 )
 
+// Gorilla mux package is used for routing implementation
 type App struct {
 	Router *mux.Router
 	DB     *sql.DB

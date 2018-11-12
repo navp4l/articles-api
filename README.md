@@ -31,7 +31,7 @@ The database for the application has been modeled as 3 tables,
 ## Assumptions
 1. Database - there was no direction on the type of database to be used. I've selected a MySQL relational db for the purposes of this implementation.
 2. The tags endpoint has been implemented to satisfy the below requirements
-  * count - the number of articles that were created with the provided tag on a specified date
+  * count - the number of times the provided tag was used on a specified date
   * articles - list of articles that contain the provided tag and were created on a specified date, limited to 10
   * related_tags - list of all tags (without duplicates and excluding the provided tag) that feature in all articles that 		     contain the provided tag and were created on a specified date
 

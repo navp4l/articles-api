@@ -27,6 +27,7 @@ func (article *Article) CreateArticle() error {
 		_ = txn.Rollback()
 	}()
 
+	// Insert into articles table
 	result, insertArticleErr := txn.Exec(insertArticle)
 
 	if insertArticleErr != nil {
@@ -43,6 +44,7 @@ func (article *Article) CreateArticle() error {
 
 	for _, tag := range article.Tags {
 
+		// Check if tags exist in tags table
 		countStatement := fmt.Sprintf("SELECT COUNT(*) FROM tags WHERE name='%s'", tag)
 
 		var countResult int
@@ -55,6 +57,7 @@ func (article *Article) CreateArticle() error {
 		var tagId int64
 		var tagIdLastErr error
 
+		// If tag exists then in tags table then retrieve tag id
 		if countResult > 0 {
 			tagsSelectStatement := fmt.Sprintf("SELECT tag_id FROM tags WHERE name='%s'", tag)
 
@@ -64,7 +67,7 @@ func (article *Article) CreateArticle() error {
 				return tagIdErr
 			}
 
-		} else {
+		} else { // If tag doesn't exist then insert into tags table
 			tagsInsertStatement := fmt.Sprintf("INSERT INTO tags(name) VALUES('%s')", tag)
 
 			result, err := txn.Exec(tagsInsertStatement)
@@ -81,6 +84,7 @@ func (article *Article) CreateArticle() error {
 
 		}
 
+		// Insert tag and article mapping in tag map table
 		tagMapStatement := fmt.Sprintf("INSERT INTO tagmap(article_id, tag_id) VALUES('%v','%v')", articleId, tagId)
 
 		_, tagMapErr := txn.Exec(tagMapStatement)
@@ -96,6 +100,8 @@ func (article *Article) CreateArticle() error {
 }
 
 func (article *Article) GetArticle() error {
+
+	// Retrieve article from articles table
 	selectArticleStatement := fmt.Sprintf("SELECT title, body, date FROM articles WHERE Id=%d", article.ID)
 	selectArticleErr := DB.QueryRow(selectArticleStatement).Scan(&article.Title, &article.Body, &article.Date)
 
@@ -103,6 +109,7 @@ func (article *Article) GetArticle() error {
 		return selectArticleErr
 	}
 
+	// Retrieve tags mapped to article
 	selectTagStatement := fmt.Sprintf("SELECT t1.name FROM tags t1 RIGHT JOIN tagmap t2 ON t1.tag_id=t2.tag_id WHERE t2.article_id=%d", article.ID)
 	selectTagResult, selectTagError := DB.Query(selectTagStatement)
 
