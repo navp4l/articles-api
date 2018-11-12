@@ -97,7 +97,7 @@ func TestArticleNotAvailable(t *testing.T) {
 	}
 }
 
-func TestCreateUser(t *testing.T) {
+func TestCreateArticle(t *testing.T) {
 	emptyTables()
 
 	payload := []byte(`{

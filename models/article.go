@@ -3,7 +3,6 @@ package models
 import (
 	"fmt"
 	. "github.com/palanisn/articles-api/database"
-	"log"
 )
 
 type Article struct {
@@ -38,35 +37,26 @@ func (article *Article) CreateArticle() error {
 
 	article.ID = int(articleId)
 
-	log.Println("Article Id is", articleId)
-
 	if lastIdErr != nil {
 		return lastIdErr
 	}
 
-	for index, tag := range article.Tags {
+	for _, tag := range article.Tags {
 
 		countStatement := fmt.Sprintf("SELECT COUNT(*) FROM tags WHERE name='%s'", tag)
-
-		fmt.Println("countStatement", countStatement)
 
 		var countResult int
 		countErr := DB.QueryRow(countStatement).Scan(&countResult)
 
 		if countErr != nil {
-			fmt.Println("Inside error")
 			return countErr
 		}
-
-		fmt.Println("countResult", countResult)
 
 		var tagId int64
 		var tagIdLastErr error
 
 		if countResult > 0 {
 			tagsSelectStatement := fmt.Sprintf("SELECT tag_id FROM tags WHERE name='%s'", tag)
-
-			log.Println("In tag statements count > 0 :: ", tagsSelectStatement)
 
 			tagIdErr := DB.QueryRow(tagsSelectStatement).Scan(&tagId)
 
@@ -76,8 +66,6 @@ func (article *Article) CreateArticle() error {
 
 		} else {
 			tagsInsertStatement := fmt.Sprintf("INSERT INTO tags(name) VALUES('%s')", tag)
-
-			log.Println("In tag statements count < 0 :: ", tagsInsertStatement)
 
 			result, err := txn.Exec(tagsInsertStatement)
 
@@ -93,23 +81,13 @@ func (article *Article) CreateArticle() error {
 
 		}
 
-		log.Println(fmt.Sprintf("Tag id for index %v is %v", index, tagId))
-
 		tagMapStatement := fmt.Sprintf("INSERT INTO tagmap(article_id, tag_id) VALUES('%v','%v')", articleId, tagId)
 
-		tagMapResult, tagMapErr := txn.Exec(tagMapStatement)
+		_, tagMapErr := txn.Exec(tagMapStatement)
 
 		if tagMapErr != nil {
 			return tagMapErr
 		}
-
-		tagMapId, tagMapLastErr := tagMapResult.LastInsertId()
-		if tagMapLastErr != nil {
-			return tagMapLastErr
-		}
-
-		log.Println("Last Tag map id is", tagMapId)
-
 	}
 
 	// Commit the transaction.
@@ -122,7 +100,6 @@ func (article *Article) GetArticle() error {
 	selectArticleErr := DB.QueryRow(selectArticleStatement).Scan(&article.Title, &article.Body, &article.Date)
 
 	if selectArticleErr != nil {
-		log.Println("Inside Get Article - selectArticleStatement")
 		return selectArticleErr
 	}
 
@@ -130,7 +107,6 @@ func (article *Article) GetArticle() error {
 	selectTagResult, selectTagError := DB.Query(selectTagStatement)
 
 	if selectTagError != nil {
-		log.Println("Inside Get Article - selectArticleStatement")
 		return selectTagError
 	}
 

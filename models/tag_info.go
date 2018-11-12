@@ -3,7 +3,6 @@ package models
 import (
 	"fmt"
 	. "github.com/palanisn/articles-api/database"
-	"log"
 )
 
 type TagInfo struct {
@@ -19,9 +18,7 @@ func (tagInfo *TagInfo) GetTagInfo() error {
 	tagName := tagInfo.Tag
 	date := tagInfo.Date
 
-	log.Println("Date before", date)
 	date = fmt.Sprintf("%s-%s-%s", string(date[:4]), string(date[4:6]), string(date[6:]))
-	log.Println("Date after", date)
 
 	countStatement := fmt.Sprintf("SELECT COUNT(*) FROM articles t1, tags t2, tagmap t3 WHERE t1.date='%s' "+
 		"AND t1.id=t3.article_id AND t2.tag_id=t3.tag_id AND t2.name='%s'", date, tagName)
@@ -33,21 +30,15 @@ func (tagInfo *TagInfo) GetTagInfo() error {
 		"( SELECT t1.id FROM articles t1, tags t2, tagmap t3 WHERE t1.date='%s' AND t1.id=t3.article_id AND t2.tag_id=t3.tag_id AND t2.name='%s' ) "+
 		"AND tm.tag_id=tg.tag_id;", date, tagName)
 
-	log.Println("countStatement ", countStatement)
 	countErr := DB.QueryRow(countStatement).Scan(&tagInfo.Count)
 
-	log.Println("After count")
-
 	if countErr != nil {
-		log.Println("Inside Count Err")
 		return countErr
 	}
 
-	log.Println("articlesSelectStatement ", articlesSelectStatement)
 	articlesSelectResult, articlesSelectErr := DB.Query(articlesSelectStatement)
 
 	if articlesSelectErr != nil {
-		log.Println("Inside articlesSelectErr")
 		return articlesSelectErr
 	}
 
@@ -62,11 +53,9 @@ func (tagInfo *TagInfo) GetTagInfo() error {
 	}
 	tagInfo.Articles = articles
 
-	log.Println("relatedTagsStatement ", relatedTagsStatement)
 	relatedTagsResult, relatedTagsErr := DB.Query(relatedTagsStatement)
 
 	if relatedTagsErr != nil {
-		log.Println("Inside relatedTagsErr")
 		return relatedTagsErr
 	}
 
