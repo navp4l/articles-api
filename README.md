@@ -8,9 +8,25 @@ The *Articles* API provides the below endpoints,
 
 ## Application Design
 
+This application is designed as a simple application that exposes REST endpoints to be consumed
+by clients,
 
+![Application Design](img/appDesign.png)
+
+The application is organized as multiple packages,
+
+![Application Structure](img/appStruct.png)
 
 ## Database Design
+
+The database for the application has been modeled as 3 tables,
+
+*   articles
+*   tagmap
+*   tags
+
+![Database Design](img/dbDesign.png)
+
 
 ## Programming Language - **Go**
 
