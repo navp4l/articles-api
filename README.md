@@ -97,12 +97,15 @@ DROP TABLE articles_store.tags;
 ```
 
 ### Step by step guide
+* Execute DDL scripts provided above
 * Clone the repository into local workspace 
-`git clone `
+`git clone`
 * Change to project directory
 `cd articles-api`
 * Build the application 
 `go build`
+* Execute tests
+`go test`
 * Install the application
 `go install`
 * Run the application by passing in appropriate command line flags
@@ -142,6 +145,3 @@ curl -H "Accept: application/json" -H "Content-Type: application/json" -X GET ht
 Alternatively, you can import the setup files into [Postman](https://www.getpostman.com/) and test the endpoints from there.
 The import file is linked at [https://www.getpostman.com/collections/51008fcd78ff0287f853](https://www.getpostman.com/collections/51008fcd78ff0287f853)
  
-
-
-
