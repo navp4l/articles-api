@@ -1,26 +1,21 @@
 
 # Articles REST API
 
-The *Articles* API provides the below endpoints,
-* POST /articles - Create new articles
-* GET /articles/{id} - Fetch & return article matching provided id
-* GET /tags/{tagName}/{date} - Get tag related information for the date provided
-
 ## Solution Outline
 
 ### Application Design
 
-This application is designed as a simple application that exposes REST endpoints to be consumed by clients. The application mostly uses standard packages from the Go library with
-the exception of the *gorilla/mux* package which was used for the purposes of routing. Data validation on incoming url parameters are placed at the router level with the help of regex
+![Application Design](img/appDesign.png)
+
+The Articles API is a simple application that exposes REST endpoints to be consumed by clients. The application mostly uses standard packages from the Go library with
+the exception of the *gorilla/mux* package which is used for the purposes of routing. Data validation on incoming url parameters are done at the router level with the help of regex
 patterns. 
 
-Since the application is a simple REST service API, its designed and implemented as a monolith layered application. The separation of layers is based on responsibility of each layer - controller,
+Since the application is a simple REST service API, it is designed and implemented as a monolith but layered application. The separation of layers is based on responsibility of each layer - controller,
 router, app etc. This ensures a logic separation of application functionality / logic across the multiple packages and proves easier to read and maintain. 
 
-A single integration test file server_test.go has been created which tests the entire API end to end with a working database. I believe this closely mimics the proposed production state of the 
+A single integration test suite server_test.go has been created which tests the entire API end to end with a working database. I believe this closely mimics the proposed production state of the 
 application and adds more value to ensuring stability of the application.    
-
-![Application Design](img/appDesign.png)
 
 The application is organized as multiple packages,
 
@@ -41,6 +36,12 @@ The tagmap table has foreign key constraints on both the articles and tags table
 
 ![Database Design](img/dbDesign.png)
 
+
+The *Articles* API provides the below endpoints,
+* POST /articles - Create new articles
+* GET /articles/{id} - Fetch & return article matching provided id
+* GET /tags/{tagName}/{date} - Get tag related information for the date provided
+
 ## Assumptions
 1. Database - there was no direction on the type of database to be used. I've selected a MySQL relational db for the purposes of this implementation.
 2. The tags endpoint has been implemented to satisfy the below requirements
@@ -59,7 +60,8 @@ The tagmap table has foreign key constraints on both the articles and tags table
 * Postman
 * Curl
 
-In addition to the standard packages from the Go library Open source libraries were used,
+## Packages
+In addition to Go standard packages the below Open source library was used,
 * [Gorilla Mux](https://github.com/gorilla/mux)- Application routing implementation
 
 ## Setup instructions
@@ -120,6 +122,7 @@ DROP TABLE articles_store.tags;
 ```
 
 ### Step by step guide
+* Set up Go env and MySQL DB as pre-requisite steps
 * Execute DDL scripts provided above
 * Clone the repository into local workspace 
 `git clone`
@@ -166,7 +169,7 @@ curl -H "Accept: application/json" -H "Content-Type: application/json" -X GET ht
 ```
 
 Alternatively, you can import the setup files into [Postman](https://www.getpostman.com/) and test the endpoints from there.
-The import file is linked at [https://www.getpostman.com/collections/51008fcd78ff0287f853](https://www.getpostman.com/collections/51008fcd78ff0287f853)
+The import file is linked at [https://www.getpostman.com/collections/51008fcd78ff0287f853](https://www.getpostman.com/collections/51008fcd78ff0287f853). It is possible to import the above link directly into Postman to get the pre-created collection.
  
 ## Future improvements
 As future scope, I would
