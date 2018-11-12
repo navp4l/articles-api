@@ -6,7 +6,8 @@ The *Articles* API provides the below endpoints,
 * GET /articles/{id} - Fetch & return article matching provided id
 * GET /tags/{tagName}/{date} - Get tag related information for the date provided
 
-## Application Design
+## Solution Outline
+### Application Design
 
 This application is designed as a simple application that exposes REST endpoints to be consumed
 by clients,
@@ -17,7 +18,7 @@ The application is organized as multiple packages,
 
 ![Application Structure](img/appStruct.png)
 
-## Database Design
+### Database Design
 
 The database for the application has been modeled as 3 tables,
 
@@ -27,7 +28,16 @@ The database for the application has been modeled as 3 tables,
 
 ![Database Design](img/dbDesign.png)
 
-## Programming Language - **Go**
+## Assumptions
+1. Database - there was no direction on the type of database to be used. I've selected a MySQL relational db for the purposes of this implementation.
+2. The tags endpoint has been implemented to satisfy the below requirements
+  * count - the number of articles that were created with the provided tag on a specified date
+  * articles - list of articles that contain the provided tag and were created on a specified date, limited to 10
+  * related_tags - list of all tags (without duplicates and excluding the provided tag) that feature in all articles that 		     contain the provided tag and were created on a specified date
+
+## Programming Language
+* Go
+* SQL
 
 ## Tools Used
 * MySQL DB
@@ -145,3 +155,7 @@ curl -H "Accept: application/json" -H "Content-Type: application/json" -X GET ht
 Alternatively, you can import the setup files into [Postman](https://www.getpostman.com/) and test the endpoints from there.
 The import file is linked at [https://www.getpostman.com/collections/51008fcd78ff0287f853](https://www.getpostman.com/collections/51008fcd78ff0287f853)
  
+## Future improvements
+As future scope, I would
+* Implement API authentication using JWT.
+* Add additional end points to update article, delete article.
