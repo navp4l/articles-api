@@ -121,10 +121,10 @@ curl -H "Content-Type: application/json" \
     -H "Accept: application/json"\
     -X POST \
    --data '{
- 	"Title" : "fifth now this again with tags another lorem",
- 	"Date" : "2018-11-12",
- 	"Body" : "fourth now this again with tags another lorem lipsum, some text, potentially containing simple markup about how potato chips are great",
- 	"Tags" : ["global", "home", "well-being"]
+ 	"title" : "Test title",
+ 	"date" : "2018-11-12",
+ 	"body" : "Test body for the article",
+ 	"tags" : ["health", "fitness", "gym"]
  }' \
    http://localhost:8080/articles
 ```
