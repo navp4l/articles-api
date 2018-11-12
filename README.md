@@ -7,10 +7,18 @@ The *Articles* API provides the below endpoints,
 * GET /tags/{tagName}/{date} - Get tag related information for the date provided
 
 ## Solution Outline
+
 ### Application Design
 
-This application is designed as a simple application that exposes REST endpoints to be consumed
-by clients,
+This application is designed as a simple application that exposes REST endpoints to be consumed by clients. The application mostly uses standard packages from the Go library with
+the exception of the *gorilla/mux* package which was used for the purposes of routing. Data validation on incoming url parameters are placed at the router level with the help of regex
+patterns. 
+
+Since the application is a simple REST service API, its designed and implemented as a monolith layered application. The separation of layers is based on responsibility of each layer - controller,
+router, app etc. This ensures a logic separation of application functionality / logic across the multiple packages and proves easier to read and maintain. 
+
+A single integration test file server_test.go has been created which tests the entire API end to end with a working database. I believe this closely mimics the proposed production state of the 
+application and adds more value to ensuring stability of the application.    
 
 ![Application Design](img/appDesign.png)
 
@@ -26,6 +34,11 @@ The database for the application has been modeled as 3 tables,
 *   tagmap
 *   tags
 
+Relational database was selected for this implementation because of the need to setup relations between articles tables and tags tables. MySQL is a good fit for this implementation due to its
+performance and ease of use. 
+
+The tagmap table has foreign key constraints on both the articles and tags tables.
+
 ![Database Design](img/dbDesign.png)
 
 ## Assumptions
@@ -33,7 +46,7 @@ The database for the application has been modeled as 3 tables,
 2. The tags endpoint has been implemented to satisfy the below requirements
   * count - the number of times the provided tag was used on a specified date
   * articles - list of articles that contain the provided tag and were created on a specified date, limited to 10
-  * related_tags - list of all tags (without duplicates and excluding the provided tag) that feature in all articles that 		     contain the provided tag and were created on a specified date
+  * related_tags - list of all tags (without duplicates and excluding the provided tag) that feature in all articles that contain the provided tag and were created on a specified date
 
 ## Programming Language
 * Go
